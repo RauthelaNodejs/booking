@@ -21,6 +21,7 @@ async function createToken(params) {
 
 
 async function verifyToken(params) {
+    console.log(params,"pppppp");
     const data = jwt.verify(params.token, "27B5427675142C449CF4B827538EA")
     return data
 }

@@ -1,5 +1,6 @@
 const userModel = require('../modal/userModal');
-const {createHash,validatePass,createToken,verifyToken} = require('../utils/comman')
+const {createHash,validatePass,createToken,verifyToken} = require('../utils/comman');
+const {authToken} = require('../middleware/authnticate')
 
 
 const signUp = async (req, res) => {
@@ -37,7 +38,7 @@ try {
             let validatePassword = await validatePass({password :password,hash :userData.password});
             if(validatePassword){
                 let token  = await createToken(userData);
-                await genrate(userData);
+                await userModel.userModel.findOneAndUpdate({_id:userData._id },{$set : {accessToken : token}})
                 console.log(token);
 
                 return res
@@ -58,6 +59,7 @@ try {
             .json({ message: "user not found"});
         }
     } catch (error) {
+        console.log(error);
         return res.status(400).json({
             message: "something went wrong",
             error: error,
@@ -69,9 +71,42 @@ try {
 
 
 
+
+const getUser = async (req, res) => {
+    try {
+       // console.log(req);
+            let {email} = req.user;
+            let userData = await userModel.userModel.findOne({email :email});
+            if(userData){
+    
+                    return res
+                    .status(200)
+                    .json({ message: "User fetched  sucessfully", data: userData });
+          
+    
+                }else{
+                   return res
+                .status(200)
+                .json({ message: "user found"});
+    
+                }
+    
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({
+                message: "something went wrong",
+                error: error,
+              });
+          
+        }
+        
+    }
+
+
 module.exports = {
     signUp,
-    login
+    login,
+    getUser
 }
 
 
