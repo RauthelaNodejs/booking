@@ -174,7 +174,13 @@ data.save();
                     }
                 },
             })
-            data.room[0].users[2].userName = userName
+            data.room[0].users.map((item ) =>{
+                if (item.userId == userId) {
+                    item.userName  = userName;
+
+                    
+                }
+            })
             data.save();
          
           
@@ -212,3 +218,5 @@ module.exports = {
     
 
     
+
+//hr@abhiwan.com
