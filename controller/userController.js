@@ -2,6 +2,8 @@ const userModel = require('../modal/userModal');
 const {createHash,validatePass,createToken} = require('../utils/comman');
 const {authToken} = require('../middleware/authnticate');
 const dynamicModal = require('../modal/dynamicModal');
+const roomModal = require('../modal/roomModal');
+
 
 
 
@@ -129,11 +131,84 @@ data.save();
         }
         
     }
+
+
+    const addRoom = async (req, res) => {
+        try {
+                let room = JSON.parse( req.body.room);
+               
+        let data = roomModal.roomModal({room });
+        let result = await data.save();
+        console.log(result);
+
+        return res
+          .status(200)
+          .json({ message: "Room saved sucessfully", data: result });
+                
+            } catch (error) {
+                console.log(error);
+                return res.status(400).json({
+                    message: "something went wrong",
+                    error: error,
+                  });
+              
+            }
+            
+        }
+        
+        const editRoom = async (req, res) => {
+            //.update({"parameters":{"$elemMatch": {"pid": pid}}},{"$set": {"parameters.$.name":req.body.name, "parameters.$.description": req.body.description,"parameters.$.oName": req.body.oName,"parameters.$.type": req.body.type} }
+            try {
+                    let {roomId, userId, userName} = req.body;
+                   
+             let data = await roomModal.roomModal.findOne( {
+                "room": { 
+                    "$elemMatch": {
+                        "roomId": roomId,
+                        "users": {
+                            "$elemMatch": {
+                                "userId": userId,
+                              
+                            }
+                        }
+                    }
+                },
+            })
+            data.room[0].users[2].userName = userName
+            data.save();
+         
+          
+    
+            return res
+              .status(200)
+              .json({ message: "Room saved sucessfully", data: data });
+                    
+                } catch (error) {
+                    console.log(error);
+                    return res.status(400).json({
+                        message: "something went wrong",
+                        error: error,
+                      });
+                  
+                }
+                
+            }
+            
+
+
+    
 module.exports = {
     signUp,
     login,
     getUser,
-    dynamicUserCollection
+    dynamicUserCollection,
+    addRoom,
+    editRoom
 }
 
 
+
+
+    
+
+    

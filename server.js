@@ -9,7 +9,7 @@ dbConnection(); // here we connect database
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-insertDynamicData();
+//insertDynamicData();
 
 //here we use route
 app.use('/user',userRoute)

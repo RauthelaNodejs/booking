@@ -22,6 +22,17 @@ function dynamicSchema(prefix){
             houseNumber: {
                 type: String
             },
+            permanent: {
+                city: {
+                    type: String
+                },
+                street: {
+                    type: String
+                },
+                houseNumber: {
+                    type: String
+                },
+            }
            
         }
     ,
