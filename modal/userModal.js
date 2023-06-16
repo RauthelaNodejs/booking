@@ -8,8 +8,18 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     address: {
-        type: String
-    },
+        city: {
+            type: String
+        },
+        street: {
+            type: String
+        },
+        houseNumber: {
+            type: String
+        },
+       
+    }
+,
     phone: {
         type: Number,
     },
@@ -19,7 +29,6 @@ const userSchema = new mongoose.Schema({
     },
     accessToken: {
         type: String,
-        required: true,
     },
     created: {
         type: Date,

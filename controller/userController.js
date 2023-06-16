@@ -1,11 +1,15 @@
 const userModel = require('../modal/userModal');
-const {createHash,validatePass,createToken,verifyToken} = require('../utils/comman');
-const {authToken} = require('../middleware/authnticate')
+const {createHash,validatePass,createToken} = require('../utils/comman');
+const {authToken} = require('../middleware/authnticate');
+const dynamicModal = require('../modal/dynamicModal');
+
 
 
 const signUp = async (req, res) => {
     try {
-        let {email,name,address,phone} = req.body;
+        let {email,name,phone} = req.body;
+        const address =JSON.parse( req.body.address);
+            
         let password = await createHash(req.body.password)
         console.log(password);
         
@@ -103,10 +107,33 @@ const getUser = async (req, res) => {
     }
 
 
+const dynamicUserCollection = async (params) => {
+    var date = new Date();
+var current_hour = date.getSeconds();
+console.log(current_hour);
+
+        try {
+            let password = await createHash(params.password)
+            params.password = password
+            console.log(params);
+            var userAdress = require('../modal/dynamicModal')(current_hour);
+const data = await userAdress(params);
+data.save();
+           
+    return data
+             
+        } catch (error) {
+            console.log(error);
+            return error;
+          
+        }
+        
+    }
 module.exports = {
     signUp,
     login,
-    getUser
+    getUser,
+    dynamicUserCollection
 }
 
 
